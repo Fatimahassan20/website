@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Updates & Blog</title>
+  <link rel="stylesheet" href="home.css" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="home.css">
+</head>
+
+<body>
+  <div class="page">
+    <!-- Header -->
+    <header>
+      <nav class="nav">
+        <h1 class="logo">College Connect</h1>
+        <ul class="menu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="updates.html">Updates</a></li>
+        </ul>
+        <button id="darkToggle" class="dark-btn">🌙</button>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      <h2>Updates & Blog</h2>
+      <p>Find announcements, events, and campus highlights. Use search to filter posts.</p>
+
+      <!-- Search Bar -->
+      <div class="search-bar">
+        <input id="searchInput" type="text" placeholder="search..." />
+        <button id="searchBtn" class="btn search">Search</button>
+        <button id="clearBtn" class="btn clear">Clear</button>
+      </div>
+
+      <!-- Filter Buttons -->
+      <div class="filters">
+        <button class="filter active" data-category="all">All</button>
+        <button class="filter" data-category="Events">Events</button>
+        <button class="filter" data-category="Clubs">Clubs</button>
+        <button class="filter" data-category="Facilities">Facilities</button>
+        <button class="filter" data-category="News">News</button>
+      </div>
+
+      <p class="post-count">4 Posts found.</p>
+
+      <!-- Posts Grid -->
+      <div class="posts">
+        <div class="post" data-category="Events">
+          <h3>Orientation Week Kickoff</h3>
+          <p class="meta">Sep 01, 2025 <span class="tag">Events</span></p>
+        </div>
+
+        <div class="post" data-category="Clubs">
+          <h3>AI Lab Open Night</h3>
+          <p class="meta">Sep 10, 2025 <span class="tag">Clubs</span></p>
+          <p>Demos on computer vision and robotics; beginners welcome!</p>
+        </div>
+
+        <div class="post" data-category="Facilities">
+          <h3>Extended Library Hours During Midterms</h3>
+          <p class="meta">Oct 03, 2025 <span class="tag">Facilities</span></p>
+          <p>Study spaces open till midnight with quiet and group zones.</p>
+        </div>
+
+        <div class="post" data-category="News">
+          <h3>College Website Refresh</h3>
+          <p class="meta">Oct 20, 2025 <span class="tag">News</span></p>
+          <p>We're modernizing navigation, accessibility, and mobile UX.</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <p>© 2025 College Connect - By the Developer Fatimah Hassan</p>
+      <a href="home.html">Go to Home →</a>
+    </footer>
+  </div>
+
+  <script>
+    // Dark mode toggle
+    const toggle = document.getElementById('darkToggle');
+    const body = document.body;
+    toggle.addEventListener('click', () => {
+      body.classList.toggle('dark');
+      toggle.textContent = body.classList.contains('dark') ? "☀️" : "🌙";
+    });
+
+    // ====== Search & Filter Logic ======
+    const searchInput = document.getElementById("searchInput");
+    const searchBtn = document.getElementById("searchBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const filters = document.querySelectorAll(".filter");
+    const posts = document.querySelectorAll(".post");
+    const postCount = document.querySelector(".post-count");
+
+    let currentFilter = "all";
+
+    function filterPosts() {
+      const query = searchInput.value.toLowerCase();
+      let visibleCount = 0;
+
+      posts.forEach(post => {
+        const text = post.innerText.toLowerCase();
+        const category = post.dataset.category;
+
+        const matchesSearch = text.includes(query);
+        const matchesFilter = (currentFilter === "all" || category === currentFilter);
+
+        if (matchesSearch && matchesFilter) {
+          post.style.display = "block";
+          visibleCount++;
+        } else {
+          post.style.display = "none";
+        }
+      });
+
+      postCount.textContent = `${visibleCount} Post${visibleCount !== 1 ? "s" : ""} found.`;
+    }
+
+    // Search button
+    searchBtn.addEventListener("click", filterPosts);
+
+    // Clear button
+    clearBtn.addEventListener("click", () => {
+      searchInput.value = "";
+      currentFilter = "all";
+      filters.forEach(f => f.classList.remove("active"));
+      filters[0].classList.add("active"); // reset to "All"
+      filterPosts();
+    });
+
+    // Filters
+    filters.forEach(button => {
+      button.addEventListener("click", () => {
+        filters.forEach(b => b.classList.remove("active"));
+        button.classList.add("active");
+        currentFilter = button.dataset.category;
+        filterPosts();
+      });
+    });
+
+    // Initial load
+    filterPosts();
+  </script>
+</body>
+</html>
